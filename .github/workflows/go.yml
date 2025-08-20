@@ -1,0 +1,19 @@
+name: Go CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.24
+      - name: Install dependencies
+        run: go mod tidy
+      - name: Run fmt & vet
+        run: go fmt ./... && go vet ./...
+      - name: Run tests with coverage
+        run: go test -race -coverprofile=coverage.out ./...
